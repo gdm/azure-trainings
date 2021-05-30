@@ -114,4 +114,30 @@ resource "azurerm_network_interface_security_group_association" "example" {
     network_security_group_id = azurerm_network_security_group.myterraformnsg.id
 }
 
+resource "azurerm_linux_virtual_machine" "myterraformvm" {
+    name                  = "myVM"
+    location              = azurerm_resource_group.contrall.location
+    resource_group_name   = azurerm_resource_group.contrall.name
+    network_interface_ids = [azurerm_network_interface.myterraformnic.id]
+    size                  = "Standard_B1s"
 
+    admin_username = "atnp"
+
+    os_disk {
+        name              = "myOsDisk"
+        caching           = "ReadWrite"
+        storage_account_type = "Standard_LRS"
+    }
+
+    source_image_reference {
+      publisher = "Canonical"
+      offer     = "0001-com-ubuntu-server-focal"
+      sku       = "20_04-lts-gen2"
+      version   = "20.04.202105130"
+    }
+    
+    admin_ssh_key {
+      username   = "atnp"
+      public_key = file("~/.ssh/azure.pub")
+    }
+}
