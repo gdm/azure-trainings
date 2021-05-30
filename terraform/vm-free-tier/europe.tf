@@ -1,3 +1,7 @@
+variable "source_ssh" {
+  type = string
+}
+
 resource "azurerm_resource_group" "contrall" {
     name     = "contrallResourceGroup"
     location = "westeurope"
