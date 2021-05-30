@@ -11,3 +11,5 @@ az vm image list --all --publisher Canonical | \
 
 # get gen2 images
 az vm image list --all --publisher Canonical |     jq '[.[] | select(.sku=="20_04-lts-gen2")]| max_by(.version)'
+
+export TF_VAR_source_ssh=86.91.
