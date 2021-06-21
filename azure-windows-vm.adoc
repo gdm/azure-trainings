@@ -1,0 +1,17 @@
+
+
+1. Connect to RDP
+2. Run power shell as administrator
+
+  Install-Module -name AzureRM -AllowClobber
+
+
+How to turn off warnings for internet explorer
+  Server Manager -> Local Server -> IE enchanced security configuration - than turn off 2 radio buttons
+
+
+  Azure File Sync Agent
+
+
+  How to enable collecting performance counters
+    Server Manager->All servers -> right click, start performance counters

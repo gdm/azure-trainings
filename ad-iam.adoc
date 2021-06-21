@@ -1,0 +1,168 @@
+
+Sources of truth
+  Limits: https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits
+  Azure Build in Roles https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+  Azure AD service limits https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/directory-service-limits-restrictions?context=/azure/active-directory/roles/context/ugr-context
+
+
+AWS - Azure service names https://docs.microsoft.com/en-us/azure/architecture/aws-professional/services
+ARM best practices https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/best-practices?view=azure-devops
+
+
+From https://www.youtube.com/watch?v=10PbGbTUSAg
+
+Connect your on-premise AD to your Azure Account
+
+Features for Azure AD connect (seamless SSO from on-premise AD to Azure) :
+  - Password hash synch - sign-in method, synch hashes of passwords
+  - pass-through auth   sign-in method, allows user to use the same password ?
+  - federation integration - hybrid env using on-premises AD FS, for cert renewal
+  - synchronization - for creating groups,users, other AD objects, ensures that on-prem and cloud data matches
+  - health monitoring - provide central location in Azure portal (Azure AD Connect Health)
+
+How to assign resource access rights to users (in Azure):
+  Direct assignment
+  Group assignment
+  Rule-based assignment - the resource owner creates a group and uses a rule to define which users are assigned to the specific resource
+  External authority assignment. Access comes from an external source, such as an on-premises directory or a SaaS app.
+
+External Identities in Azure AD allows people outside of your org to access your apps and resources, while letting them sign-in 
+   - login from for ex Google or Facebook
+   - share apps with external users
+   - develop apps intended for other Azure AD tenants (single-tenant or multi-tenant)
+   - develop white-labeled apps for consumers and customers (Azure
+
+Azure AD tenant - ? 
+ 
+
+3 ways to get devices to Azure AD
+
+- Azure AD Registered  (Windows 10/iOS/Android/MacOS)
+  - personally owned
+  - signed with personal Microsoft or local account
+
+- Azure AD Joined  (Windows 10, Server 2019 VM in Azure)
+  - owned by org
+  - signed in with Azure AD account belonging to org
+  - only in the cloud
+
+- Hybrid Azure AD Joined (Windows 7, 8, 10, Server 2008 or newer)
+  - owned by org
+  - signed in with Azure AD account belonging to org
+  - in cloud + on-premises
+   
+
+.h3 RBAC 
+
+role assignment contains:
+  - security principal
+  - role definition
+  - scope
+
+4 fundamental Azure roles:
+  
+
+A security principal (who requested the access)
+  - user (PA, in Azure AD)
+  - group  (in Azure AD)
+  - service principal (NPA-kind of)
+  - -managed identity (managed by Azure)
+
+Scopes: Management Group -> Subscriptions -> Resource groups -> Resources (VM, keys, etc)
+
+Built in roles:
+  - owner
+  - contributer (no grant rights, can delete )
+  - Reader (ro)
+  - User Access Administrator (only Grant)
+  
+az role definition list   - list all roles in json including permission
+
+
+Azure Policies - only for ensuring compliance, doesn't restrict actions (also called operations)
+  Evaluate state by examination properties on resources that are in Resource Manager and properties of some Resource Provider
+Azure roles - for control access
+
+
+Azure AD roles (for access to AD resources) vs Azure Roles (for Azure Resources)
+AD resources:
+  - users
+  - groups
+  - billing
+  - licensing
+  - Application Registration
+  - etc
+
+by default Global Administrator doesn't have access to Azure resources
+
+my role in portal Service Administrator
+about roles https://docs.microsoft.com/en-us/azure/role-based-access-control/rbac-and-directory-admin-roles#azure-ad-roles
+Least privileged roles by task https://docs.microsoft.com/en-us/azure/active-directory/roles/delegate-by-task
+RBAC troubleshooting https://docs.microsoft.com/en-us/azure/role-based-access-control/troubleshooting
+  az login --service-principal --username "SPNid" --password "password" --tenant "tenantid"
+  az role assignment create --assignee "userupn" --role "Contributor"  --scope "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}"
+  az role assignment create --assignee-object-id 11111111-1111-1111-1111-111111111111  --role "Contributor" --scope "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}"
+
+Assignable scopes https://docs.microsoft.com/en-us/azure/role-based-access-control/role-definitions#assignablescopes
+
+  
+Classic Adminitstrators types of roles
+ Account Administrator (billing owner) - no access to Azure portal
+ Service Administrator
+ Co-administrator
+
+Azure AD roles
+  Global Administrator - build in role with full access to Azure 
+  User Administrator - full access to create and manage users
+  Billing Administrator - purcheches, manage subscriptions, support tickets
+ 
+
+
+ARM (Azure Resource Manager) layers:
+ - subscriptions
+ - management groups
+ - resource groups
+ - resource providers
+ - resource locks
+ - Azure Blueprints
+ - Resource Tags
+ - Access Control (IAM)
+ - RBAC
+ - Azure Policies
+ - ARM Templates
+
+
+.h3 Hierarchy
+
+Management Groups -> Subscriptions (billing) -> Resource Groups -> Resources (created by Resource Providers)
+
+Lock can be done on subscription, resource group or resource:
+  - CanNotDelete, update is possible
+  - ReadOnly
+
+
+h4. Azure Blueprints
+
+a declarative way to orchestrate the deployment of resource templates and other artifacts such as:
+ - Role Assignments
+ - Policy Assignments
+ - ARM templates
+ - Resource Groups
+
+ARM template vs Azure Blueprints
+
+ARM template - only to one subscription, file stored locally, no connection to resources after creation
+Azure Blueprints - can create resources in multiple suscription, tracking/auditing to the created resources, file stored in Azure Cosmo DB
+  terms:
+    blueprint definition - what should be deployed
+    blueprint assignment - what was deployed
+
+
+
+
+.h2 New tools/concepts
+
+
+Moving Azure resources to another region / Site recovery  https://docs.microsoft.com/en-us/azure/site-recovery/azure-to-azure-move-overview
+Azure Traffic Manager is a DNS-based traffic load balancer 
+Azure ExpressRoute

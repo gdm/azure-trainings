@@ -1,0 +1,7 @@
+
+ARM Templates - "Custom deployments" in the portal
+
+az deployment group show \
+  -g <resource-group-name> \
+  -n <deployment-name> \
+  --query properties.otputs

@@ -1,0 +1,165 @@
+
+.h2 Storage account overview
+
+different Storage types / Account kind / several types of storage account
+- general-purpose v1 (legacy)
+- general purpose v2
+- blob storage (legacy)
+- block blob storage
+- file storage
+
+Supported services (what can I put into this storage account)
+- Blob  (S3)
+- File  - AWS EFS
+- Queue - SQS
+- Table  - AWS DynamoDB
+- Disk- EBS ?
+- Data Lake Gen2
+
+Performance Tiers
+- Standard
+- Premium
+
+Access Tiers
+- Premium
+- Hot
+- Cool
+- Archive
+
+Replication
+- LRS Locally Reduntant Storage (single AZ, 11 nines durability 
+- GRS Geo Reduntant Storage (3 copies in 1 AZ primary region to 3 copies in 1 AZ in secondary region) - 16 nines durability
+- RA-GRS Read Access Geo Reduntant Storage
+- ZRS Zone reduntant storage (3 AZ, synchronously, 12 nine durability)
+- GZRS Geo Zone reduntant storage (3 AZ primary -> 3 copy in 1AZ secondary)
+- RA-GZRS  Read Access geo zone reduntant storage
+
+Deployment model: Resource Manager / Classic
+
+
+.h3 Blobs
+
+Tyes of blobs
+ - Blob blocks - up to 4.75TiB (AWS S3 ?)
+ - Append blobs
+ - Page blobs - up to 8TB, virtual hard drives (VHD)
+
+Copy data to blobs:
+  - AzCopy - cli for linux and windows
+  - Azure Storage Data Movement Library - .Net library, uses AzCopy
+  - Azure Data Factory - ETL service from Azure
+  - Blobfuse - FUSE fs, only Linux
+  - Azure Data Box - a device provided by Azure, physically transport
+  - Azure Import/Export service - ship your physical disk to Azure (can use both own and microsoft drives - up to 5*8TB - Data Box)
+           WAImportExport tool - tool for data preparation
+
+SBM port - 445
+
+.h3 Azure File Synch
+
+An intermediate cache for files
+
+.h4 AzCopy
+
+executable for windows, linux and mac
+
+Required rights
+ - Storage Blob Data Reader (for download)
+ - Storage Blob Data Contributor
+ - Storage Blob Data Owner
+
+ways to login:
+  1. Azure Active Directory
+  2. Shared Access Signature (SAS) - azcopy login -> page ../devicelogin
+    Types of SAS:
+     1. account-level
+     2. service-level (single storage account) 
+     3. user delegation SAS (only for Blobs and Containers), access using AD creds
+
+  Format of SAS (signatuse):
+    1. ad-hoc SAS - start, finish time and permission are part of URI - any type
+    2. service SAS with stored access policy  (only for blob container, table, queue and file share), can be combined (multiple SAS)
+
+.h4 Azure Storage Explorer
+
+Standalone app for viewing storages/snapshots/operation with files
+
+
+
+.h3 Azure Files
+
+Network mounted storage - NFS or SBM (Server Message Block) protocols
+Use cases:
+ - replaces NAS (Network Attached Storage)
+ - "Lift and Shift" (to the cloud)
+    - Classic Lift (move application and application data to the cloud)
+    - Hybrid Lift (only application data moved, applications are running on-premise)
+ - simplify cloud deployment (sharing the same fs across multiple VMs)
+ - persistency for containers (docker)
+
+Backups for Azure Files
+ - file-based RO snapshots (up to 200)
+ - retain for up to 10 years
+ - soft delete option (wait some time before actual deletion)
+
+Advanced Threat Protection (ATP) for anomalous activity in storage account
+
+Store tiers:
+  - Premium (SSD)
+  - Transaction optimized (HDD) - standard
+  - Hot - 'optimized for general purpose file sharing schenarios'
+  - Cold - HDD, optimized for archiving
+
+Types of storage:
+  - General purpose version 2 - HDD
+  - FileStorage  - SDD
+
+Identity
+  - on-premises (on premise AD Domain Service)
+  - managed (Azure AD)
+  - Store Account Key - username(storage account name) and password (storage account password) can be used to mount
+
+
+
+
+.h4 Disk comparisons
+
+From [here](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types)
+
+| Type          | Max throughput   | Max IOPS  
+| ------------- |:----------------:| ---------:|
+| Standard HDD      | 500 MB/s | 2000 |
+| Standard SSD      | 750 MB/s      | 6000  |
+| Premium SSD | 900 MB/s |    20 000 |
+| Ultra disk | 2000 MB/s |    160 000 |
+
+All Max size 32TiB
+
+.h5 Ultra disks
+
+Fixed sizes from 4 GiB to 64TiB
+Disk IOPS should be less than VM IOPS limit.
+Min guaranteed IOPS for  = max(100, size_of_disk/GiB ) IOPS 
+throughput =  (provisioned IOPS / 4)  MiB/s
+min guaranteed throughput  = max(provisioned IOPS * 4 KiB/s , 1MiB/s)
+
+.h5 Premium SSD
+
+Fixed size from 4GiB to 32TiB
+Bursting (credit-based for <= 512GiB  or on-demand for > 512GiB, only in West Central US)
+IO operates with blocks 256KiB
+performance tier can be changed without changing size
+
+Px (1,2
+p1 - 4GiB, 120 IOPS, 25 MB/s,
+
+Max IOPS per disk 3500 (all till P20 512 GiB)
+Max burst per disk 170 MB/s (all)
+Max burrst duration (per day?) - 30 min
+provisisoned IOPS per disk - 120 for small, P20 - 2300, .. P80 32 GiB 20 000
+
+
+.h5 Standard SSD
+
+E1 - 
+

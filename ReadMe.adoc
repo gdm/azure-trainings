@@ -3,3 +3,6 @@
 
 Preparation for AZ-104 Azure certification exam
 ================================
+
+Cheatsheets for https://www.youtube.com/watch?v=10PbGbTUSAg
+  Storage Account Cheatsheets: 3:54:50
